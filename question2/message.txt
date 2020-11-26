@@ -1,0 +1,71 @@
+#include "page.hpp"
+
+#include <algorithm>
+#include <assert.h>
+#include <stdlib.h>
+
+void effaceMoi(const std::vector<Resultat> resultats) {
+  // Cette fonction a deux utilites:
+  //  1) Vous prouver qu'on peut declarer et implementer de nouvelles
+  //  	 fonctions dans un .cpp sans les declarer dans le fichier .hpp
+  //  	 (que vous ne devez pas modifier)
+  //  2) Vous faire réaliser que cette fonction qui ne semble rien faire
+  //     s'exécute en fait en Theta(n) puisque le vecteur est copie
+  //     (il n'est pas passe par reference)
+  //  Maintenant que vous le savez, vous pouvez effacer cette fonction.
+}
+
+int partition(std::vector<Resultat>& nums, int lo, int hi) {
+  int mid = lo + (hi - lo)/2;          // pivot
+  Resultat val = nums[mid];                 // pivot
+  std::swap(nums[mid], nums[hi]);           // move to last position
+  int res = lo;                        // The smallest index which is larger than pivot
+  for(int i = lo; i < hi; i++) {
+    if(val < nums[i])
+      std::swap(nums[res++], nums[i]);
+  }
+  std::swap(nums[res], nums[hi]);
+  return res;
+}
+
+Resultat findKthLargest(std::vector<Resultat>& nums, int k) {
+  int left = 0;
+  int right = nums.size() - 1;
+  int order = nums.size() - k; // reuslt position
+  while(right > left) {
+    int idx = partition(nums, left, right);
+    if(idx == order)
+      return nums[idx];
+    else if(idx > order)
+      right = idx - 1;
+    else
+      left = idx + 1;
+  }
+  return nums[right];
+}
+
+
+// Retourne les resultats d'une page
+// Entrees:
+//   resultats_non_tries: tous les resultats de recherche non tries
+//   nombre_resultats_par_page: le nombre de resultats par page (sauf possiblement sur la derniere page)
+//   numero_page: le numero de la page. La premiere page est la page numero 0.
+// Sortie:
+//   page: les resultats de recherche se trouvant sur la page demandee
+void retournePage(const std::vector<Resultat>& resultats_non_tries, unsigned int nombre_resultats_par_page, unsigned int numero_page, std::vector<Resultat>& page) {
+  assert(!resultats_non_tries.empty());
+  assert(page.empty());
+  assert(nombre_resultats_par_page > 0);
+  assert(numero_page < (resultats_non_tries.size() + nombre_resultats_par_page - 1) / nombre_resultats_par_page); // (a + b - 1) / b = plafond(a/b)
+
+  // Inserez votre code ici.
+  //  - Vous ne pouvez pas modifier le vecteur resultats_non_tries, mais rien ne vous empeche de modifier une copie.
+  //  - N'hesitez pas a definir d'autres fonctions (mais ne les declarez pas le .hpp)
+
+  std::vector<Resultat> resultats_non_tries_copie = std::vector<Resultat>(resultats_non_tries);
+  unsigned int premier_resultat = nombre_resultats_par_page * numero_page;
+  unsigned int dernier_resultat = premier_resultat + nombre_resultats_par_page < resultats_non_tries.size() ? premier_resultat + nombre_resultats_par_page : resultats_non_tries.size();
+  for (unsigned int i = premier_resultat + 1; i < dernier_resultat + 1; i++) {
+   page.push_back(findKthLargest(resultats_non_tries_copie, i));
+  }
+}

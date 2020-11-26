@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/vincebro/Documents/automne2020/algo/tp2/question2/page.cpp
+page.hpp
+/home/vincebro/Documents/automne2020/algo/tp2/question2/page.hpp
+algorithm
+-
+assert.h
+-
+stdlib.h
+-
+random
+-
+chrono
+-
+iostream
+-
+
+/home/vincebro/Documents/automne2020/algo/tp2/question2/page.hpp
+vector
+-
+resultat.hpp
+/home/vincebro/Documents/automne2020/algo/tp2/question2/resultat.hpp
+
+/home/vincebro/Documents/automne2020/algo/tp2/question2/resultat.hpp
+string
+-
+

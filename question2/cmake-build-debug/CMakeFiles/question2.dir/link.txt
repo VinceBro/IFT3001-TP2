@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/question2.dir/page.cpp.o CMakeFiles/question2.dir/resultat.cpp.o CMakeFiles/question2.dir/tests.cpp.o  -o question2 
