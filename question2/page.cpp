@@ -74,8 +74,13 @@ void effaceMoi(const std::vector<Resultat> resultats) {
 //  }
 //  return r;
 //}
-int partition(std::vector<Resultat> & arr, int l, int r)
+int partition(std::vector<Resultat> & arr, int l, int r, std::default_random_engine & generateur)
 {
+  std::uniform_int_distribution<int> uniforme(l, r);
+  const unsigned int s = uniforme(generateur);
+
+  std::swap(arr[r], arr[s]);
+
   Resultat x = arr[r];
   int i = l;
   for (int j = l; j <= r - 1; j++) {
@@ -87,7 +92,7 @@ int partition(std::vector<Resultat> & arr, int l, int r)
   std::swap(arr[i], arr[r]);
   return i;
 }
-int kthSmallest(std::vector<Resultat> & arr, int l, int r, int k)
+int kthSmallest(std::vector<Resultat> & arr, int l, int r, int k, std::default_random_engine & generateur)
 {
   // If k is smaller than number of
   // elements in array
@@ -96,7 +101,7 @@ int kthSmallest(std::vector<Resultat> & arr, int l, int r, int k)
     // Partition the array around last
     // element and get position of pivot
     // element in sorted array
-    int index = partition(arr, l, r);
+    int index = partition(arr, l, r, generateur);
 
     // If position is same as k
     if (index - l == k - 1)
@@ -105,11 +110,11 @@ int kthSmallest(std::vector<Resultat> & arr, int l, int r, int k)
     // If position is more, recur
     // for left subarray
     if (index - l > k - 1)
-      return kthSmallest(arr, l, index - 1, k);
+      return kthSmallest(arr, l, index - 1, k, generateur);
 
     // Else recur for right subarray
     return kthSmallest(arr, index + 1, r,
-                       k - index + l - 1);
+                       k - index + l - 1, generateur);
   }
 
   // If k is more than number of
@@ -148,8 +153,8 @@ void retournePage(const std::vector<Resultat>& resultats_non_tries, unsigned int
   if (index_max >= resultats.size()) {
     index_max = resultats.size();
   }
-  int index1 = kthSmallest(resultats, 0, resultats.size() - 1, index_min);
-  int index2 = kthSmallest(resultats, index1, resultats.size() - 1, index_max - index1);
+  int index1 = kthSmallest(resultats, 0, resultats.size() - 1, index_min, generateur);
+  int index2 = kthSmallest(resultats, index1, resultats.size() - 1, index_max - index1, generateur);
   if (index_max == resultats.size()) {
     page = std::vector<Resultat>(resultats.begin() + index1, resultats.begin() + index2 + 1);
     std::sort(page.begin(), page.end());
